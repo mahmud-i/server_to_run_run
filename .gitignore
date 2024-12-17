@@ -13,9 +13,6 @@
 # git ignore directory
 
 
-# Ignore every directory by default
-*/
-
 
 # Allow regression_package
 !templates/
