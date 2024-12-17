@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testing Ground Control</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #f5f7fa, #c3cfe2 80%);
+            line-height: 1.5;
+            color: #333;
+        }
+        header {
+            background: #397DC0;
+            color: white;
+            padding: 0.8rem; /* Slightly reduced padding */
+            text-align: center;
+        }
+        h1 {
+            margin-bottom: 1.3rem;
+        }
+        h2 {
+            margin: 0.8rem 0 0.4rem; /* Reduced margin */
+            color: #EA7826;
+        }
+        main {
+            padding: 0.8rem 1.2rem; /* Slightly reduced padding */
+            max-width: 600px;
+            margin: 1.5rem auto 2.5rem;
+            background: ghostwhite;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 1.5rem auto 2.5rem;
+        }
+        .button {
+            display: inline-block;
+            padding: 15px 30px;
+            font-size: 18px;
+            text-decoration: none;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        .run-test {
+            background-color: #0D4781; /* Green */
+            margin-top: 80px;
+            margin-bottom: 50px;
+            font-size: 22px; /* Larger font size for emphasis */
+            font-weight: bold;
+            color: whitesmoke;
+            width: 60%;
+            padding: 12px 2px; /* Increased padding for a bigger button */
+        }
+        .additional-container{
+            display: flex;
+            justify-content: center; /* Center the buttons horizontally */
+            gap: 10px; /* Add space between the buttons */
+            width: 60%;
+            margin-top: 8px; /* Optional: add margin to the top */
+        }
+        .create-config, .check-config {
+            background-color: #397DC0; /* Blue */
+            font-size: 13px; /* Smaller font size */
+            padding: 8px 10px; /* Smaller padding */
+            flex: 1; /* Allows buttons to take equal space */
+            text-align: center; /* Center text within buttons */
+        }
+
+        .footer-content {
+            position: fixed; /* Keeps the footer fixed at the bottom */
+            bottom: 15px;
+            right:15px;
+            padding: 10px;
+            font-size: 13px;
+            color: #777;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .footer-content img {
+            height: 40px; /* Adjust the logo size */
+            margin-left: 15px;
+        }
+
+        .footer-content p {
+            margin-left : -35px;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Regression Testing Ground Control</h1>
+    </header>
+    <main>
+        <h2>KENVUE [DxP]</h2>
+        <div class="container">
+            <a href="/run_test" class="button run-test">Run Test</a>
+            <div class="additional-container">
+                <a href="/create_brand_config" class="button create-config">Create Brand Config File</a>
+                <a href="/view_brand_config" class="button check-config">Check Brand Config File</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <img src="../static/company_logo.png" alt="SJInnovation LLC Logo">
+        </div>
+    </footer>
+</body>
+</html>

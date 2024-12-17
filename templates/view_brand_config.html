@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Bench</title>
+    <style>
+    /* Existing styles... */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #f5f7fa, #c3cfe2 60%);
+            color: #333;
+            line-height: 1.5;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: #397DC0;
+            color: white;
+            padding: 0.8rem; /* Slightly reduced padding */
+            text-align: center;
+        }
+
+        .home-button {
+            position: absolute;
+            padding: 0.2rem 0.6rem;
+            top: 1.5rem;
+            left: 1rem;
+            font-size: 1rem;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .home-button:hover {
+            transform: translateY(-2px);
+        }
+
+        h1 {
+            margin-top: 0.8rem;
+            margin-bottom: 0.8rem; /* Reduced margin */
+        }
+
+        h2 {
+            margin: 0.8rem 0 0.4rem; /* Reduced margin */
+            color: #EA7826;
+        }
+
+        .data_brand {
+            margin: 0.8rem 0 1rem;
+            color: #EA7826;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        main {
+            padding: 0.8rem 2.5rem;
+            max-width: 900px;
+            margin: 1.5rem auto 5rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .brand-check-container {
+            display: flex;
+            gap: 0.5rem;
+            margin: 1.5rem 0 3.5rem;
+        }
+        input[type="text"] {
+            flex: 1;
+            font-size: 0.9rem;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            transition: border-color 0.3s;
+        }
+
+    input[type="text"]:focus,
+    select:focus {
+        border-color: #397DC0;
+        outline: none;
+    }
+
+        button {
+            padding: 0.5rem 2.5rem;
+            font-size: 1rem;
+            background: #397DC0;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #397DC0;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .config-frame {
+            margin-top: 1rem;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: #f9f9f9;
+        }
+        .hidden {
+            display: none;
+        }
+        .warning {
+            margin-top: 2rem;
+            color: red;
+            text-align: center;
+        }
+        .warning button {
+            margin: 1rem auto 2rem;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 4% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            max-width: 800px;
+            width: 80%;
+
+        }
+        .modal-content h2 {
+            text-align: center; /* center the heading horizontally */
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            margin-right: 1rem;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-content button#save_config {
+            display: block;
+            margin-left: auto;
+            margin-right: 40px;
+            margin-bottom: 25px;
+            margin-top: 30px;
+        }
+
+        .modal-content textarea {
+            margin-top: 15px;
+            margin-bottom: 20px;
+            margin-left: 30px;
+            margin-right: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: vertical;
+            max-width: 720px;
+            height: 50vh;
+            width: 92%;
+            box-sizing: border-box;
+        }
+
+        .top-level-json {
+            font-weight: bold;
+            padding: 10px; /* Increased padding for better appearance */
+            background-color: #f9f9f9;
+        }
+
+        .top-level-json > .json-key {
+            display: inline-block;
+            margin-top: 10px;
+            font-weight: bold;
+            color: #397DC0;
+            width: 100%; /* Make sure the key takes the full width */
+            padding-bottom: 8px; /* Space between key and value */
+        }
+
+        .json-element {
+            margin-left: 20px;
+            padding: 5px; /* Increased padding for better spacing */
+            color: #333;
+            display: flex;
+            flex-direction: column; /* Stack items vertically */
+            gap: 5px; /* Increased gap for better separation */
+        }
+
+        .json-element > .json-key {
+            display: inline-block;
+            width: 100%; /* Allow keys to take full width */
+            font-size: 0.87rem; /* Adjusted font size */
+            font-weight: bold;
+            text-align: left;
+            color: #666;
+        }
+
+        .json-element > .json-value {
+            display: inline-block;
+            width: 90%; /* Make value take full width */
+            margin-left: 30px; /* Remove left margin */
+            padding: 2px;
+            font-size: 0.86rem; /* Adjusted font size */
+            font-weight: normal;
+            color:#222;
+            word-wrap: break-word; /* Allow long words to wrap */
+        }
+
+
+        .edit-button {
+            display: block;
+            margin-left: auto;
+            margin-right: 20px;
+            margin-bottom: 10px;
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            position: fixed; /* Keeps the footer fixed at the bottom */
+            bottom: 15px;
+            right:15px;
+            padding: 10px;
+            font-size: 13px;
+            color: #777;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .footer-content img {
+            height: 40px; /* Adjust the logo size */
+            margin-left: 15px;
+        }
+
+        .footer-content p {
+            margin-left : -35px;
+            margin-bottom: 8px;
+        }
+
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="/" class="home-button">Back to Main Page</a>
+    <h1>Throwback Test Bench</h1>
+</header>
+
+<main>
+    <h2>Check Brand Config</h2>
+    <div class="brand-check-container">
+        <input type="text" id="brand_name" name="brand_name" placeholder="Enter Brand Name. e.g., zyrtec_us, aveeno_us">
+        <button id="check_brand">Check</button>
+    </div>
+
+    <div id="config_frame" class="config-frame hidden">
+        <div id="data_brand_name" class="data_brand"></div>
+        <div id="json_display" class="json-container"></div>
+        <button id="edit_config" class="edit-button">Edit</button>
+    </div>
+
+    <div id="warning_message" class="warning hidden">
+        <p>Brand configuration not found.</p>
+        <button id="create_config">Create Brand Config File</button>
+    </div>
+
+    <div id="edit_modal" class="modal hidden">
+        <div class="modal-content">
+            <span id="close_modal" class="close">&times;</span>
+            <h2>Edit Configuration</h2>
+            <textarea id="config_text" rows="10" placeholder="Edit config here..."></textarea>
+            <button id="save_config">Save</button>
+        </div>
+    </div>
+
+</main>
+<footer>
+    <div class="footer-content">
+        <img src="../static/company_logo.png" alt="SJInnovation LLC Logo">
+    </div>
+</footer>
+
+<script>
+    // Function to check brand configuration
+    document.getElementById('check_brand').addEventListener('click', async function() {
+        const brandName = document.getElementById('brand_name').value;
+
+        if (brandName) {
+            displayBrandName(brandName);
+            try {
+                const response = await fetch(`/check_brand_config/${brandName}`);
+
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log(data);
+                    if (data.exists) {
+                        displayJson(data.data);
+                        document.getElementById('config_frame').classList.remove('hidden');
+                        document.getElementById('warning_message').classList.add('hidden');
+                    } else {
+                        document.getElementById('config_frame').classList.add('hidden');
+                        document.getElementById('warning_message').classList.remove('hidden');
+                    }
+                } else {
+                    alert('Failed to check for the config file.');
+                }
+            } catch (error) {
+                console.error('Error checking for the config file:', error);
+                alert('An error occurred while checking for the config file.');
+            }
+        } else {
+            alert('Please enter a brand name.');
+        }
+    });
+
+    // Create new brand configuration
+    document.getElementById('create_config').addEventListener('click', function() {
+        window.location.href = '/create_brand_config';
+    });
+
+    // Edit configuration
+    document.getElementById('edit_config').addEventListener('click', function() {
+        const brandName = document.getElementById('data_brand_name').textContent;
+        console.log(brandName);
+
+        if (brandName) {
+            fetch(`/check_brand_config/${brandName}`)
+            .then(response => response.text()) // fetch the data as text instead of JSON
+            .then(data => {
+                document.getElementById('config_text').value = data;
+                document.getElementById('edit_modal').classList.remove('hidden');
+                document.getElementById('edit_modal').style.display = 'block';
+            })
+            .catch(error => {
+                console.error('Error fetching config data:', error);
+                alert('Failed to fetch config data.');
+            });
+        } else {
+            alert('Please enter a brand name.');
+        }
+    });
+
+    // Save the configuration
+    document.getElementById('save_config').addEventListener('click', async function() {
+        const brandName = document.getElementById('data_brand_name').textContent;
+        const content = document.getElementById('config_text').value;
+
+        try{
+            const response = await fetch(`/save_config/${brandName}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ content })
+            });
+
+            if (response.ok) {
+                alert('Configuration saved successfully.');
+                document.getElementById('edit_modal').classList.add('hidden');
+                displayJson(JSON.parse(content)); // Update display with new content
+            } else {
+                console.error('Error saving configuration:', response.status);
+                alert('Failed to save configuration.');
+            }
+        } catch (error) {
+            console.error('Error saving configuration:', error);
+            alert('An error occurred while saving the configuration.');
+        }
+    });
+
+    // Function to create and display structured JSON
+    function createJsonElement(key, value, level = 0) {
+        console.log("Creating JSON element for:", key, value); // Log each key and value
+        const div = document.createElement('div');
+
+        // Assign different classes based on the level
+        if (level === 0) {
+            div.classList.add('top-level-json'); // For top-level keys
+        } else {
+            div.classList.add('json-element'); // For nested values
+        }
+
+        const label = document.createElement('span');
+        label.textContent = `${key}:`;
+        label.classList.add('json-key');
+        div.appendChild(label);
+
+        if (typeof value === 'object' && value !== null) {
+            const nestedContainer = document.createElement('div');
+            Object.entries(value).forEach(([nestedKey, nestedValue]) => {
+                nestedContainer.appendChild(createJsonElement(nestedKey, nestedValue, level+1));
+            });
+            div.appendChild(nestedContainer);
+        } else {
+            const valueSpan = document.createElement('span');
+            valueSpan.textContent = ` ${value}`;
+            valueSpan.classList.add('json-value');
+            div.appendChild(valueSpan);
+        }
+
+        return div;
+    }
+
+    // Close the modal
+    document.querySelector('.close').addEventListener('click', function() {
+        document.getElementById('edit_modal').style.display = 'none';
+        document.getElementById('edit_modal').classList.add('hidden');
+    });
+
+    // Function to display the brand name
+    function displayBrandName(brandName) {
+        // Get the element where the brand name should be displayed
+        const brandNameElement = document.getElementById('data_brand_name');
+
+        // Set the text content of the element to the brand name
+        brandNameElement.textContent = `${brandName}`;
+    }
+
+
+    // Function to display JSON data in the modal
+    function displayJson(data) {
+        console.log("Data to display:",data);
+
+        const jsonContainer = document.getElementById('json_display');
+        jsonContainer.innerHTML = ''; // Clear previous content
+
+        try{
+            // Create sections for each part of the JSON
+            jsonContainer.appendChild(createJsonElement('urls_data', {
+                prod_domain_url: data?.urls_data?.prod_domain_url ?? "Null",
+                csv_file_path: data?.urls_data?.csv_file_path ??  "Null",
+                urls_list: data?.urls_data?.urls_list ?? "Null"
+            }, 0));
+
+            jsonContainer.appendChild(createJsonElement('testing_data_path', data?.testing_data_path?? "Null", 0));
+
+            jsonContainer.appendChild(createJsonElement('integration_check', data?.integration_check?? "Null", 0));
+
+        } catch (error) {
+            console.error('Error displaying JSON:', error);
+            alert('Failed to display JSON.');
+        }
+    }
+</script>
+</body>
+</html>

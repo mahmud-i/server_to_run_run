@@ -1,19 +1,18 @@
-# ignore all the files
+# Ignore everything by default
 *
 
-
-# Allow only the files
+# Allow specific files
 !app.py
 !requirements.txt
 !config_server_template.ini
 
-# Optional: Allow .gitignore itself to be tracked
+# Allow the `.gitignore` file itself
 !.gitignore
 
-# git ignore directory
-
-
-
-# Allow regression_package
+# Unignore directories first, then their contents
 !templates/
 !static/
+
+# Ensure contents of directories are also tracked
+!templates/**
+!static/**

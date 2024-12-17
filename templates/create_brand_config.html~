@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testing Arcade</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #f5f7fa, #c3cfe2 60%);
+            color: #333;
+            line-height: 1.5;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: #397DC0;
+            color: white;
+            padding: 0.8rem; /* Slightly reduced padding */
+            text-align: center;
+        }
+
+        .home-button {
+            position: absolute;
+            padding: 0.2rem 0.6rem;
+            top: 1.5rem;
+            left: 1rem;
+            font-size: 1rem;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .home-button:hover {
+            transform: translateY(-2px);
+        }
+
+        h1 {
+            margin-top: 0.8rem;
+            margin-bottom: 0.8rem; /* Reduced margin */
+        }
+
+        h2 {
+            margin: 0.8rem 0 0.4rem; /* Reduced margin */
+            color: #EA7826;
+        }
+
+        h3 {
+            margin: 0.8rem 0 0.4rem; /* Reduced margin */
+            color: #397DC0;
+        }
+
+        main {
+            padding: 0.8rem 2.5rem;
+            max-width: 900px;
+            margin: 1.5rem auto 5rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        main h2 {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .brand-container,
+        .urls-container,
+        .data-container,
+        .integration-container
+        {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin: 0.2rem 0.2rem 0.2rem;
+            font-size:14px;
+        }
+
+        .required:after {
+            content: ' *';
+            color: red; /* Red asterisk for required fields */
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 0.3rem;
+            font-size: 13px;
+            margin-bottom: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            transition: border-color 0.3s;
+            flex: 1;
+        }
+
+        button {
+            padding: 0.5rem 2.5rem;
+            font-size: 1rem;
+            background: #397DC0;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 3rem auto 1.5rem;
+            display: block; /* Make the button a block element */
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        button:hover {
+            background: #397DC0;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .message {
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            position: fixed; /* Keeps the footer fixed at the bottom */
+            bottom: 15px;
+            right:15px;
+            padding: 10px;
+            font-size: 13px;
+            color: #777;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .footer-content img {
+            height: 40px; /* Adjust the logo size */
+            margin-left: 15px;
+        }
+
+        .footer-content p {
+            margin-left : -35px;
+            margin-bottom: 8px;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/" class="home-button">Back to Main Page</a>
+        <h1>Test Setup Chronicles</h1>
+    </header>
+
+    <main>
+        <h2>Create Brand Configuration File</h2>
+        <form id="brandConfigForm">
+            <div class="brand-container">
+                <h3>Brand Details</h3>
+                <label for="brand_name" class="required">Brand Name:</label>
+                <input type="text" id="brand_name" name="brand_name" placeholder="Enter Brand Name" required>
+
+                <label for="prod_domain_url" class="required">Production Domain URL:</label>
+                <input type="text" id="prod_domain_url" name="prod_domain_url" placeholder="Enter production domain URL" required>
+            </div>
+
+            <div class="urls-container">
+                <h3>Configuration for URLs Parsing</h3>
+                <label for="csv_file_path">CSV File Path:</label>
+                <input type="text" id="csv_file_path" name="csv_file_path" placeholder="Enter CSV file path">
+
+                <label for="urls_list">Test URLs (comma separated):</label>
+                <textarea id="urls_list" name="urls_list" placeholder="Input a list of URLs for test, separated by commas"></textarea>
+            </div>
+
+            <div class="data-container">
+                <h3>Testing Dta Configuration</h3>
+                <label for="data_directory">Testing Data Base Directory:</label>
+                <input type="text" id="data_directory" name="data_directory" placeholder="Enter directory of approved data files">
+            </div>
+
+            <div class="integration-container">
+                <h3>Integration Check Configuration</h3>
+                <label for="ucu_slug">UCU Slug (comma separated):</label>
+                <input type="text" id="ucu_slug" name="ucu_slug" placeholder="List of page slugs where UCU link exists, separated by commas">
+
+                <label for="contact_us">Contact Us Page Slug:</label>
+                <input type="text" id="contact_us" name="contact_us" placeholder="Contact us page slug for the brand">
+
+                <label for="faq">FAQ Page Slug:</label>
+                <input type="text" id="faq" name="faq" placeholder="FAQ page slug for the brand">
+
+                <label for="dsar_text">DSAR Link Text:</label>
+                <input type="text" id="dsar_text" name="dsar_text" placeholder="DSAR link text in the footer, separated by commas">
+            </div>
+
+            <button type="submit">Save Configuration</button>
+            <div class="message" id="message"></div>
+        </form>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <img src="../static/company_logo.png" alt="SJInnovation LLC Logo">
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('brandConfigForm').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Prevent form submission
+
+            const formData = {
+                brand_name: document.getElementById('brand_name').value,
+                prod_domain_url: document.getElementById('prod_domain_url').value,
+                csv_file_path: document.getElementById('csv_file_path').value,
+                urls_list: document.getElementById('urls_list').value,
+                data_directory: document.getElementById('data_directory').value,
+                ucu_slug: document.getElementById('ucu_slug').value,
+                contact_us: document.getElementById('contact_us').value,
+                faq: document.getElementById('faq').value,
+                dsar_text: document.getElementById('dsar_text').value,
+            };
+
+            try {
+                const response = await fetch(`/save_config/${formData.brand_name}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+                document.getElementById('message').innerText = result.message || 'Configuration saved successfully.';
+                document.getElementById('brandConfigForm').reset(); // Reset the form
+            } catch (error) {
+                console.error('Error saving configuration:', error);
+                document.getElementById('message').innerText = 'Failed to save configuration. Please try again.';
+            }
+        });
+    </script>
+</body>
+</html>

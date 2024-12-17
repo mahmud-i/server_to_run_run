@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Bench</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #f5f7fa, #c3cfe2 60%);
+            color: #333;
+            line-height: 1.5;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: #397DC0;
+            color: white;
+            padding: 0.8rem;
+            text-align: center;
+        }
+
+        .home-button {
+            position: absolute;
+            padding: 0.2rem 0.6rem;
+            top: 1.5rem;
+            left: 1rem;
+            font-size: 1rem;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .home-button:hover {
+            transform: translateY(-2px);
+        }
+
+
+        h1 {
+            margin-top: 0.8rem;
+            margin-bottom: 0.3rem;
+        }
+
+        h2 {
+            margin: 0.8rem 0 1.4rem; /* Reduced margin */
+            color: #EA7826;
+            text-align: center;
+        }
+
+        main {
+            padding: 0.8rem 2.5rem;
+            max-width: 900px;
+            margin: 1.5rem auto 5rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .brand-check-container {
+            display: flex;
+            gap: 0.5rem;
+            margin: 1.5rem 0 3.5rem;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 0.5rem 1rem;
+            background: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #357ab8;
+        }
+
+        .config-frame {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: #f9f9f9;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .warning {
+            margin-top: 2rem; /* Top margin for spacing above the message */
+            color: red;
+            text-align: center; /* Center the text */
+        }
+
+        .warning button {
+            margin: 1rem auto 2rem; /* Space between the message and the button */
+        }
+
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* Could be more or less, depending on screen size */
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .footer-content {
+            position: fixed; /* Keeps the footer fixed at the bottom */
+            bottom: 15px;
+            right:15px;
+            padding: 10px;
+            font-size: 13px;
+            color: #777;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .footer-content img {
+            height: 40px; /* Adjust the logo size */
+            margin-left: 15px;
+        }
+
+        .footer-content p {
+            margin-left : -35px;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/" class="home-button">Back to Main Page</a>
+        <h1>Throwback Test Bench</h1>
+    </header>
+
+    <main>
+        <h2>Check Brand Config</h2>
+        <div class="brand-check-container">
+            <input type="text" id="brand_name" name="brand_name" placeholder="Enter Brand Name. e.g., zyrtec_us, aveeno_us">
+            <button id="check_brand">Check</button>
+        </div>
+
+        <div id="config_frame" class="config-frame hidden">
+            <button id="edit_config" class="edit-button">Edit</button>
+            <div id="config_details"></div> <!-- Area to display brand config details -->
+        </div>
+
+        <div id="warning_message" class="warning hidden">
+            <p>Brand configuration not found.</p>
+            <button id="create_config">Create Brand Config File</button>
+        </div>
+
+        <!-- Edit Config Modal -->
+        <div id="edit_modal" class="modal hidden">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Edit Configuration</h2>
+                <textarea id="config_text" rows="10" placeholder="Edit config here..."></textarea>
+                <button id="save_config">Save</button>
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <img src="../static/company_logo.png" alt="SJInnovation LLC Logo">
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('check_brand').addEventListener('click', async function() {
+            const brandName = document.getElementById('brand_name').value;
+
+            if (brandName) {
+                // Call the Flask API to check for the config file
+                try {
+                    const response = await fetch(`/check_config/${brandName}`); // Call the Flask endpoint
+
+                    if (response.ok) {
+                        const data = await response.json();
+
+                        if (data.exists) {
+                            // Show config details if found
+                            document.getElementById('config_details').innerText = data.message; // Display details
+                            document.getElementById('config_frame').classList.remove('hidden');
+                            document.getElementById('warning_message').classList.add('hidden');
+                        } else {
+                            // Show warning if not found
+                            document.getElementById('config_frame').classList.add('hidden');
+                            document.getElementById('warning_message').classList.remove('hidden');
+                        }
+                    } else {
+                        alert('Failed to check for the config file.');
+                    }
+                } catch (error) {
+                    console.error('Error checking for the config file:', error);
+                    alert('An error occurred while checking for the config file.');
+                }
+            } else {
+                alert('Please enter a brand name.');
+            }
+        });
+
+        document.getElementById('create_config').addEventListener('click', function() {
+            window.location.href = '/create_brand_config';
+        });
+
+        document.getElementById('edit_config').addEventListener('click', async function() {
+            const brandName = document.getElementById('brand_name').value;
+
+            if (brandName) {
+                // Fetch the config file content
+                const response = await fetch(`/check_config/${brandName}`);
+                const data = await response.json();
+
+                if (data.exists) {
+                    // Preload data into the textarea
+                    document.getElementById('config_text').value = data.content;
+                    document.getElementById('edit_modal').classList.remove('hidden');
+                } else {
+                    alert('Configuration not found. Cannot edit.');
+                }
+            } else {
+                alert('Please enter a brand name.');
+            }
+        });
+
+        // Close the modal
+        document.querySelector('.close').addEventListener('click', function() {
+            document.getElementById('edit_modal').classList.add('hidden');
+        });
+
+        // Save the configuration
+        document.getElementById('save_config').addEventListener('click', async function() {
+            const brandName = document.getElementById('brand_name').value;
+            const content = document.getElementById('config_text').value;
+
+            const response = await fetch(`/save_config/${brandName}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ content })
+            });
+
+            if (response.ok) {
+                alert('Configuration saved successfully.');
+                document.getElementById('edit_modal').classList.add('hidden');
+            } else {
+                alert('Failed to save configuration.');
+            }
+        });
+    </script>
+</body>
+</html>
