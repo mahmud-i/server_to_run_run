@@ -152,7 +152,7 @@
         </form>
     </main>
     <footer>
-        <div class="footer-content">Powered by:
+        <div class="footer-content">
             <img src="../static/company_logo.png" alt="SJInnovation LLC Logo">
         </div>
     </footer>
