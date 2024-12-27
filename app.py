@@ -146,9 +146,12 @@ def run_test():
         parsing_method = request.form.get('parsing_method','3')
 
         # Check brand configuration availability before running tests
-        brand_availability = check_config(brands)
-        if not brand_availability['exists']:
-            return jsonify({"message": brand_availability['message']}), 404
+        brand_list = brands.split(',')
+        brand_list = [brand.strip() for brand in brand_list]
+        for brand in brand_list:
+            brand_availability = check_config(brand)
+            if not brand_availability['exists']:
+                return jsonify({"message": brand_availability['message']}), 404
 
         # Create a new INI file for test run configuration
         test_config = ConfigParser()
